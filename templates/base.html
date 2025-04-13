@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e0e8f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 240px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .logo {
+            color: #f8b627;
+            font-size: 26px;
+            margin-bottom: 40px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            margin-left: 15px;
+            font-weight: bold;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: #8c8c8c;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: #4a86f7;
+            background-color: rgba(74, 134, 247, 0.08);
+        }
+
+        .nav-item.active {
+            border-left: 3px solid #4a86f7;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            margin-left: 15px;
+            font-size: 15px;
+            white-space: nowrap;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        .logout-button {
+            margin-top: auto;
+            margin-bottom: 20px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            color: #e74c3c;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(231, 76, 60, 0.08);
+        }
+
+        .logout-text {
+            margin-left: 15px;
+            font-size: 15px;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar.collapsed .logout-text {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        .toggle-sidebar {
+            position: absolute;
+            top: 20px;
+            right: -12px;
+            background-color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        /* Main Content Area */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar {
+            background-color: #f8f8f8;
+            border-radius: 20px;
+            padding: 8px 15px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding-left: 8px;
+            font-size: 14px;
+        }
+
+        .date-display {
+            background-color: #f8f8f8;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-bell {
+            color: #8c8c8c;
+            position: relative;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: #f8b627;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f8b627;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo-text, .nav-text, .logout-text {
+                opacity: 0;
+                visibility: hidden;
+                display: none;
+            }
+            
+            .toggle-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                width: 180px;
+            }
+            
+            .date-display {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .search-bar {
+                order: 3;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="toggle-sidebar">
+            <i class="fas fa-chevron-left" id="sidebar-toggle-icon"></i>
+        </div>
+        <div class="logo">
+            <i class="fas fa-bolt"></i>
+            <span class="logo-text">ToyForge</span>
+        </div>
+        <div class="nav-items">
+            <a href="/" class="nav-item active">
+                <i class="fas fa-th-large nav-icon"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="/products" class="nav-item">
+                <i class="fas fa-box nav-icon"></i>
+                <span class="nav-text">Products</span>
+            </a>
+            <a href="/categories" class="nav-item">
+                <i class="fas fa-tags nav-icon"></i>
+                <span class="nav-text">Categories</span>
+            </a>
+            <a href="/reports" class="nav-item">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span class="nav-text">Sales Reports</span>
+            </a>
+            <a href="/bulk-import" class="nav-item">
+                <i class="fas fa-file-import nav-icon"></i>
+                <span class="nav-text">Bulk Import</span>
+            </a>
+            <a href="/users" class="nav-item admin-only">
+                <i class="fas fa-users nav-icon"></i>
+                <span class="nav-text">Users</span>
+            </a>
+            <a href="/settings" class="nav-item">
+                <i class="fas fa-cog nav-icon"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </div>
+        <a href="/logout" class="logout-button">
+            <i class="fas fa-sign-out-alt nav-icon"></i>
+            <span class="logout-text">Logout</span>
+        </a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #8c8c8c;"></i>
+                <input type="text" placeholder="Search...">
+            </div>
+
+            <div class="date-display">
+                <i class="far fa-calendar-alt" style="margin-right: 5px;"></i>
+                <span id="current-date">3 August, 2023</span>
+            </div>
+
+            <div class="user-profile">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-count">2</div>
+                </div>
+                <div class="profile-pic">
+                    <span>S</span>
+                </div>
+            </div>
+        </header>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display current date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            const currentDate = document.getElementById('current-date');
+            if (currentDate) {
+                currentDate.textContent = today.toLocaleDateString('en-US', options);
+            }
+
+            // Toggle sidebar
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    if (sidebar.classList.contains('collapsed')) {
+                        toggleIcon.classList.remove('fa-chevron-left');
+                        toggleIcon.classList.add('fa-chevron-right');
+                    } else {
+                        toggleIcon.classList.remove('fa-chevron-right');
+                        toggleIcon.classList.add('fa-chevron-left');
+                    }
+                });
+            }
+
+            // Active navigation item
+            const navItems = document.querySelectorAll('.nav-item');
+            const currentPath = window.location.pathname;
+            
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (href === currentPath || (href === '/' && currentPath === '')) {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                }
+                
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Check if user is admin for admin-only items
+            // This is a placeholder - you would replace this with your actual authentication logic
+            const isAdmin = true; // Change this based on user role
+            const adminOnlyItems = document.querySelectorAll('.admin-only');
+            
+            adminOnlyItems.forEach(item => {
+                if (!isAdmin) {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Notification functionality
+            const notificationBell = document.querySelector('.notification-bell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    alert('Notifications clicked - you would show a dropdown here');
+                });
+            }
+            
+            // Profile picture functionality
+            const profilePic = document.querySelector('.profile-pic');
+            if (profilePic) {
+                profilePic.addEventListener('click', function() {
+                    alert('Profile clicked - you would show a dropdown here');
+                });
+            }
+        });
+
+        // Add any additional JavaScript below
+        {% block scripts %}{% endblock %}
+    </script>
+</body>
+
+</html>

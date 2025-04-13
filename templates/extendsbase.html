@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block styles %}
+<!-- Add any page-specific CSS here -->
+<style>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .product-card {
+        background-color: #f8f8f8;
+        border-radius: 10px;
+        padding: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Product Management</h1>
+<p>View and manage all your products here.</p>
+
+<div class="product-grid">
+    <div class="product-card">
+        <h3>Product 1</h3>
+        <p>Description of product 1</p>
+    </div>
+    <div class="product-card">
+        <h3>Product 2</h3>
+        <p>Description of product 2</p>
+    </div>
+    <!-- More products... -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    console.log('Product page loaded!');
+    // Add any page-specific JavaScript here
+</script>
+{% endblock %}
