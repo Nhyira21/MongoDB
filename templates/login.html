@@ -22,7 +22,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url("{{url_for('static', filename='images\loginbg1.png')}}");
+            background-image: url("{{url_for('static', filename='images/loginbg1.png')}}");
             background-position: center;
             background-size: cover;
             width: 100vw;
@@ -159,7 +159,7 @@
             <i class="fas fa-bolt"></i>
         </div>
         <h1>Login to Dashboard</h1>
-        <form id="loginForm">
+        <form id="loginForm" action="{{ url_for('loginhandling') }}" method="POST">
             <div class="form-group">
                 <label for="loginUsername">Username</label>
                 <div class="input-with-icon">
@@ -186,7 +186,7 @@
             <i class="fas fa-bolt"></i>
         </div>
         <h1>Create Account</h1>
-        <form id="signupForm">
+        <form id="signupForm" action="{{ url_for('signup') }}" method="POST">
             <div class="form-group">
                 <label for="signupUsername">Username</label>
                 <div class="input-with-icon">
@@ -257,8 +257,8 @@
                     // Show successful login alert
                     alert('Login successful');
                     
-                    // You could redirect to the dashboard page here
-                    // window.location.href = "dashboard.html";
+                    // Redirect to the dashboard page
+                    window.location.href = "{url_for('home')}"; // Replace with your dashboard page path
                 } else {
                     alert('Please enter both username and password');
                 }
@@ -284,9 +284,12 @@
                     // Show successful signup alert
                     alert('Account created successfully');
                     
-                    // Switch to login page
-                    signupContainer.style.display = 'none';
-                    loginContainer.style.display = 'block';
+                    // Option 1: Switch to login page within the same HTML
+                    // signupContainer.style.display = 'none';
+                    // loginContainer.style.display = 'block';
+                    
+                    // Option 2: Redirect to a welcome page or directly to dashboard
+                    window.location.href = "{url_for('home')}"; // Replace with your desired page
                 } else {
                     alert('Please fill in all fields');
                 }

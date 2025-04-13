@@ -1,18 +1,47 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, redirect, request, render_template, url_for
 from pymongo import MongoClient
 app = Flask(__name__)
+
 
 @app.route('/')
 def login():
     return render_template("login.html")
 
+@app.route('/login', methods=['POST'])
+def login_handling():
+    # Get form data
+    username = request.form.get('username')
+    password = request.form.get('password')
+    
+    # Validate user credentials
+    # ...
+    
+    # If successful, redirect to dashboard
+    return redirect(url_for('home'))
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    # Get form data
+    username = request.form.get('signupUsername')
+    email = request.form.get('signupEmail')
+    password = request.form.get('signupPassword')
+    
+    # Create user account
+    # ...
+    
+    # If successful, redirect to login or dashboard
+    return redirect(url_for('home'))
+
 @app.route('/dashboard/')
 def home():
     return render_template("index.html")
 
+
 @app.route('/api/data', methods=['GET'])
 def get_data():
     data = list(collection.find({}, {"_id": 0}))  # Exclude the _id field
+
     return jsonify(data)
 
 @app.route('/api/data', methods=['POST'])
