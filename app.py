@@ -3,8 +3,12 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 @app.route('/')
-def home():
+def login():
     return render_template("login.html")
+
+@app.route('/dashboard/')
+def home():
+    return render_template("index.html")
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
