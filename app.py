@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 from pymongo import MongoClient
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -30,14 +31,10 @@ def delete_data(key):
         return jsonify({"message": "Data deleted successfully!"})
     return jsonify({"error": "Data not found"}), 404
 
-
-
-
 # MongoDB connection
 client = MongoClient("mongodb://localhost:27017/")
 db = client["mydatabase"]  # Replace with your database name
 collection = db["mycollection"]  # Replace with your collection name
-
 
 if __name__ == '__main__':
     app.run(debug=True)
