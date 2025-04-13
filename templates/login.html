@@ -29,8 +29,8 @@
             height: 100vh;
         }
 
-        /* Login Container */
-        .login-container {
+        /* Container Styles */
+        .auth-container {
             background-color: white;
             border-radius: 15px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
@@ -104,21 +104,22 @@
             margin-top: 5px;
         }
 
-        .sign-up-link {
+        .auth-link {
             font-size: 14px;
             color: #555;
             margin-top: 20px;
             display: block;
         }
 
-        .sign-up-link a {
+        .auth-link a {
             color: #4a86f7;
             text-decoration: none;
             font-weight: 500;
+            cursor: pointer;
         }
 
         /* Button */
-        .login-btn {
+        .auth-btn {
             background-color: #4a86f7;
             color: white;
             border: none;
@@ -132,13 +133,18 @@
             margin-top: 15px;
         }
 
-        .login-btn:hover {
+        .auth-btn:hover {
             background-color: #3a76e7;
+        }
+
+        /* Hide the signup form initially */
+        #signupContainer {
+            display: none;
         }
 
         /* Responsive */
         @media (max-width: 480px) {
-            .login-container {
+            .auth-container {
                 padding: 30px 20px;
                 margin: 0 15px;
             }
@@ -147,41 +153,104 @@
 </head>
 
 <body>
-    <div class="login-container">
+    <!-- Login Container -->
+    <div id="loginContainer" class="auth-container">
         <div class="logo">
             <i class="fas fa-bolt"></i>
         </div>
         <h1>Login to Dashboard</h1>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="loginUsername">Username</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                    <input type="text" id="loginUsername" class="form-control" placeholder="Enter your username" required>
                 </div>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="loginPassword">Password</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
                 </div>
                 <a href="#" class="forgot-password">Forgot password?</a>
             </div>
-            <button type="submit" class="login-btn">Login</button>
+            <button type="submit" class="auth-btn">Login</button>
         </form>
-        <p class="sign-up-link">Don't have an account? <a href="#">Sign up</a></p>
+        <p class="auth-link">Don't have an account? <a id="showSignup">Sign up</a></p>
+    </div>
+
+    <!-- Signup Container -->
+    <div id="signupContainer" class="auth-container">
+        <div class="logo">
+            <i class="fas fa-bolt"></i>
+        </div>
+        <h1>Create Account</h1>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="signupUsername">Username</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signupUsername" class="form-control" placeholder="Choose a username" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signupEmail">Email</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signupPassword">Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                </div>
+            </div>
+            <button type="submit" class="auth-btn">Sign Up</button>
+        </form>
+        <p class="auth-link">Already have an account? <a id="showLogin">Login</a></p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Get form elements
             const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
             
+            // Get container elements
+            const loginContainer = document.getElementById('loginContainer');
+            const signupContainer = document.getElementById('signupContainer');
+            
+            // Get navigation links
+            const showSignupLink = document.getElementById('showSignup');
+            const showLoginLink = document.getElementById('showLogin');
+            
+            // Toggle between login and signup forms
+            showSignupLink.addEventListener('click', function() {
+                loginContainer.style.display = 'none';
+                signupContainer.style.display = 'block';
+            });
+            
+            showLoginLink.addEventListener('click', function() {
+                signupContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
+            });
+            
+            // Handle login form submission
             loginForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
                 
                 // Simple validation
                 if (username && password) {
@@ -195,18 +264,39 @@
                 }
             });
             
+            // Handle signup form submission
+            signupForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const username = document.getElementById('signupUsername').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Simple validation
+                if (username && email && password && confirmPassword) {
+                    // Check if passwords match
+                    if (password !== confirmPassword) {
+                        alert('Passwords do not match');
+                        return;
+                    }
+                    
+                    // Show successful signup alert
+                    alert('Account created successfully');
+                    
+                    // Switch to login page
+                    signupContainer.style.display = 'none';
+                    loginContainer.style.display = 'block';
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+            
             // Handle forgot password link
             const forgotPasswordLink = document.querySelector('.forgot-password');
             forgotPasswordLink.addEventListener('click', function(event) {
                 event.preventDefault();
                 alert('Forgot password functionality will be implemented here');
-            });
-            
-            // Handle sign up link
-            const signUpLink = document.querySelector('.sign-up-link a');
-            signUpLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                alert('Sign up functionality will be implemented here');
             });
         });
     </script>
