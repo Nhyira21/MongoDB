@@ -283,6 +283,9 @@
                 width: 100%;
             }
         }
+        
+        /* Add any additional styles here */
+        {% block styles %}{% endblock %}
     </style>
 </head>
 
@@ -356,7 +359,7 @@
                 </div>
             </div>
         </header>
-
+        {% block content %}{% endblock %}
     </main>
 
     <script>

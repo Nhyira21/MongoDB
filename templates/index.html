@@ -569,7 +569,7 @@
                         </div>
                     </div>
                     <div class="welcome-image">
-                        <img src="{{ url_for('static', filename='Sailor Bear Mascot Cartoon Logo Logo Template (1).svg') }}" alt="Cute bear mascot">
+                        <img src="{{ url_for('static', filename='images/Sailor Bear Mascot Cartoon Logo Logo Template (1).svg') }}" alt="Cute bear mascot">
                         <div class="speech-bubble">
                             <i class="far fa-comment"></i>
                         </div>
@@ -695,7 +695,7 @@
             </div>
     </main>
     
-    <script src="../static/js/jquery-3.7.1.min.js"></script>
+    <script src="{{url_for('static', filename='js/jquery-3.7.1.min.js')}}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Display current date in the element with id "current-date"
@@ -1057,6 +1057,19 @@
                 onSubmit: (formData) => {
                     console.log('New task submitted:', formData);
                     // Here you can handle the submitted data as needed.
+                    $.ajax({
+                        url: "/create-task",
+                        method: "POST",
+                        data: formData,
+                        success: function (response) {
+                            console.log("Task created successfully:", response.message);
+                            alert(response.message);
+                        },
+                        error: function (error) {
+                            console.error("Error creating task:", error);
+                        }
+
+                    });
                 }
             };
 

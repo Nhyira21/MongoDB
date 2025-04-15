@@ -25,7 +25,7 @@
             background-image: url("{{url_for('static', filename='images/loginbg1.png')}}");
             background-position: center;
             background-size: cover;
-            width: 100vw;
+            
             height: 100vh;
         }
 
@@ -159,7 +159,7 @@
             <i class="fas fa-bolt"></i>
         </div>
         <h1>Login to Dashboard</h1>
-        <form id="loginForm" action="{{ url_for('loginhandling') }}" method="POST">
+        <form id="loginForm" action="{{ url_for('login_post') }}" method="POST">
             <div class="form-group">
                 <label for="loginUsername">Username</label>
                 <div class="input-with-icon">
@@ -220,7 +220,10 @@
         <p class="auth-link">Already have an account? <a id="showLogin">Login</a></p>
     </div>
 
+    <script src="{{url_for('static', filename='js/jquery-3.7.1.min.js')}}"></script>
     <script>
+        
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Get form elements
             const loginForm = document.getElementById('loginForm');
@@ -251,17 +254,25 @@
                 
                 const username = document.getElementById('loginUsername').value;
                 const password = document.getElementById('loginPassword').value;
+                $.ajax({
+                    url: "{{ url_for('login_post') }}",
+                    type: "POST",
+                    data: JSON.stringify({ username: username, password: password }),
+                    contentType: "application/json",
+                    success: function(response) {
+                        // Handle successful login response
+                        if (response.message === 'Login successful') {
+                            alert('Login successful');
+                            window.location.href = "/dashboard"; // Replace with your dashboard page path
+                        } else {
+                            alert('Invalid username or password');
+                        }
+                    },
+                    error: function(error) {
+                        alert(error.message);
+                    }
+                });
                 
-                // Simple validation
-                if (username && password) {
-                    // Show successful login alert
-                    alert('Login successful');
-                    
-                    // Redirect to the dashboard page
-                    window.location.href = "{url_for('home')}"; // Replace with your dashboard page path
-                } else {
-                    alert('Please enter both username and password');
-                }
             });
             
             // Handle signup form submission
