@@ -35,7 +35,7 @@ def login_post():
             return jsonify({"message": "Login successful"}), 200
         else:
             print("f**^ ::::::::::::::::::")
-            return jsonify({"message": "Invalid username or password"}), 401
+            return jsonify({"error": "Invalid username or password"}), 401
     
 
 @app.route('/signup', methods=['POST'])
@@ -44,6 +44,15 @@ def signup():
 @app.route('/dashboard/')
 def home():
     return render_template("extendsbase.html")
+
+
+# :::::::::::::::::::::::::::: Products :::::::::::::::::::::::::: #
+
+@app.route('/products/')
+def products():
+    return render_template('product_listing.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
