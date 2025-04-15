@@ -476,12 +476,56 @@
             {% endblock %}
       
     </main>
+    <script type="module">
+        import {ModalCreator} from "{{url_for('static', filename='js/ModalCreator.js')}}"
+        const modalEditUserConfig = {
+            modalId: 'EditUserModal', // Unique identifier for the modal
+            title: 'Edit Your Data',
+            fields: [
+                { label: 'Username', type: 'text', placeholder: 'Enter new username', name: 'username' },
+                { label: 'Email', type: 'email', name: 'email', placeholder: 'Enter New email'},
+                { label: 'Password', type: 'Password', name: 'password', placeholder: 'Enter new Password' },
+            ],
+            onSubmit: (formData) => {
+                console.log('User Editing:', formData);
+                $.ajax({
+                    url: "{{url_for('edituser')}}",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function(response){
+                        if (response.message === 'Edit successful') {
+                            alert('Edit successful');
+                             // Replace with your dashboard page path
+                        } else {
+                            console.log(response);
+                            alert('Invalid username or password');
+                        }
+                    },
+                    error: function(error){
+                        alert('Well....')
+                    }
+                });
+            }
+        };
+        const EditUserModalCreator = new ModalCreator(modalEditUserConfig);
 
+        // Profile picture functionality
+        const profileArea = document.querySelector('.profile-area');
+        if (profileArea) {
+            profileArea.addEventListener('click', function() {
+                EditUserModalCreator.open();
+            });
+        }
+
+    </script>
+    <script src="{{url_for('static', filename='js/jquery-3.7.1.min.js')}}"></script>
     <script>
         // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
             console.log("DOM fully loaded");
-            
+
+        
             // Initialize theme based on localStorage or default to light
             function initializeTheme() {
                 const savedTheme = localStorage.getItem('theme') || 'light';
@@ -512,7 +556,7 @@
                     console.log("Theme icon updated to:", theme === 'dark' ? 'sun' : 'moon');
                 }
             }
-            
+
             // Toggle between light and dark themes
             function toggleTheme() {
                 console.log("Toggle theme clicked");
@@ -536,7 +580,7 @@
                 // Alert to confirm toggle worked (can remove in production)
                 
             }
-            
+
             // Set up theme toggle button
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
@@ -545,15 +589,15 @@
             } else {
                 console.error("Theme toggle button not found");
             }
-            
+
             // Initialize the theme
             initializeTheme();
-            
+
             // Set user information
-            const userName = "{{ current_user.name if current_user else 'Sarah' }}";
+            const userName = "{{ session['user'] if session['user'] else 'Sarah' }}";
             const userRole = "{{ current_user.role if current_user else 'Admin' }}";
             const userInitial = userName ? userName[0] : 'S';
-            
+
             document.getElementById('user-name').textContent = userName;
             document.getElementById('user-role').textContent = userRole;
             document.getElementById('user-initial').textContent = userInitial;
@@ -614,13 +658,7 @@
                 });
             }
             
-            // Profile picture functionality
-            const profileArea = document.querySelector('.profile-area');
-            if (profileArea) {
-                profileArea.addEventListener('click', function() {
-                    alert('Profile clicked - you would show a dropdown here');
-                });
-            }
+        
         });
     </script>
 </body>
