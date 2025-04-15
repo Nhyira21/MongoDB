@@ -675,6 +675,169 @@
 </div>
 
 <script>
+    // DOM Elements
+    const searchInput = document.querySelector('.search-input');
+    const categoryFilter = document.querySelector('.filter-dropdown:nth-of-type(1)');
+    const stockFilter = document.querySelector('.filter-dropdown:nth-of-type(2)');
+    const sortDropdown = document.querySelector('.sort-dropdown');
+    const addProductButton = document.getElementById('addProductButton');
+
+    // State
+    let filterState = {
+    searchTerm: '',
+    category: '',
+    stock: '',
+    sort: 'name-asc'
+    };
+
+    // Event handlers
+    function handleSearch(e) {
+    filterState.searchTerm = e.target.value.toLowerCase().trim();
+    applyFilters();
+    }
+
+    function handleCategoryFilter(e) {
+    filterState.category = e.target.value;
+    applyFilters();
+    }
+
+    function handleStockFilter(e) {
+    filterState.stock = e.target.value;
+    applyFilters();
+    }
+
+    function handleSort(e) {
+    filterState.sort = e.target.value;
+    applyFilters();
+    }
+
+    function handleAddProduct() {
+    document.getElementById('productModalTitle').textContent = 'Add New Product';
+    document.getElementById('productId').value = '';
+    document.getElementById('productForm').reset();
+    document.getElementById('productModal').style.display = 'flex';
+    }
+
+    // Filter and sort implementation
+    function applyFilters() {
+    const rows = Array.from(document.querySelectorAll('.product-table tbody tr'));
+    
+    rows.forEach(row => {
+        row.style.display = 'none'; // Hide all rows initially
+        
+        const productName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        const category = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const stockValue = parseInt(row.querySelector('td:nth-child(4)').textContent);
+        const statusElement = row.querySelector('.status-badge');
+        const stockStatus = statusElement ? statusElement.textContent.toLowerCase() : '';
+        
+        // Apply search filter
+        const matchesSearch = filterState.searchTerm === '' || 
+                            productName.includes(filterState.searchTerm) || 
+                            category.includes(filterState.searchTerm);
+        
+        // Apply category filter
+        const matchesCategory = filterState.category === '' || 
+                            category.includes(filterState.category.toLowerCase().replace('-', ' '));
+        
+        // Apply stock filter
+        let matchesStock = true;
+        if (filterState.stock === 'in-stock') {
+        matchesStock = stockValue > 10;
+        } else if (filterState.stock === 'low-stock') {
+        matchesStock = stockValue > 0 && stockValue <= 10;
+        } else if (filterState.stock === 'out-of-stock') {
+        matchesStock = stockValue === 0;
+        }
+        
+        // Show row if it matches all filters
+        if (matchesSearch && matchesCategory && matchesStock) {
+        row.style.display = '';
+        }
+    });
+    
+    // Sort the visible rows
+    sortProducts(filterState.sort);
+    
+    // Update pagination after filtering
+    updatePagination();
+    }
+
+    function sortProducts(sortBy) {
+    const tbody = document.querySelector('.product-table tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+    
+    rows.sort((a, b) => {
+        switch(sortBy) {
+        case 'name-asc':
+            return a.cells[0].textContent.localeCompare(b.cells[0].textContent);
+        case 'name-desc':
+            return b.cells[0].textContent.localeCompare(a.cells[0].textContent);
+        case 'price-asc':
+            return parseFloat(a.cells[2].textContent.replace('$', '')) - 
+                parseFloat(b.cells[2].textContent.replace('$', ''));
+        case 'price-desc':
+            return parseFloat(b.cells[2].textContent.replace('$', '')) - 
+                parseFloat(a.cells[2].textContent.replace('$', ''));
+        case 'stock-asc':
+            return parseInt(a.cells[3].textContent) - parseInt(b.cells[3].textContent);
+        case 'stock-desc':
+            return parseInt(b.cells[3].textContent) - parseInt(a.cells[3].textContent);
+        default:
+            return 0;
+        }
+    });
+    
+    // Reorder the DOM elements
+    rows.forEach(row => tbody.appendChild(row));
+    }
+
+    function updatePagination() {
+    const visibleRows = document.querySelectorAll('.product-table tbody tr:not([style*="display: none"])');
+    const pageInfo = document.querySelector('.page-info');
+    
+    if (pageInfo) {
+        pageInfo.textContent = `Showing ${visibleRows.length} of ${document.querySelectorAll('.product-table tbody tr').length} products`;
+    }
+    
+    // Reset pagination to first page
+    document.querySelectorAll('.page-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const firstPageBtn = document.querySelector('.page-button:nth-child(2)');
+    if (firstPageBtn) {
+        firstPageBtn.classList.add('active');
+    }
+    }
+
+    // Debounce function to limit how often a function gets called
+    function debounce(func, delay) {
+    let timeout;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+    };
+    }
+
+    // Event listeners with debounce for better performance
+    searchInput.addEventListener('input', debounce(handleSearch, 300));
+    categoryFilter.addEventListener('change', handleCategoryFilter);
+    stockFilter.addEventListener('change', handleStockFilter);
+    sortDropdown.addEventListener('change', handleSort);
+    addProductButton.addEventListener('click', handleAddProduct);
+
+    // Initialize filters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+    // Set initial sort option
+    sortDropdown.value = filterState.sort;
+    
+    // Apply initial filters
+    applyFilters();
+    });
+
     // Modal functionality
     function openModal(modalId) {
         document.getElementById(modalId).style.display = 'flex';
