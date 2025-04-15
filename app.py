@@ -8,6 +8,12 @@ db = client["toyforge"]  # Replace with your database name
 user_collection = db["users"]  # Replace with your collection name
 
 
+
+@app.route('/basest')
+def basest():
+    return render_template("base.html")
+
+
 @app.route('/')
 def login():
     return render_template("login.html")
@@ -37,7 +43,7 @@ def signup():
     return render_template("base.html")
 @app.route('/dashboard/')
 def home():
-    return render_template("index.html")
+    return render_template("extendsbase.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
