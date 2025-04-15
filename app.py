@@ -3,13 +3,19 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 
+
+@app.route('/basest')
+def basest():
+    return render_template("base.html")
+
+
 @app.route('/')
 def login():
     return render_template("login.html")
 
 @app.route('/dashboard/')
 def home():
-    return render_template("index.html")
+    return render_template("extendsbase.html")
 # MongoDB connection
 client = MongoClient("mongodb://localhost:27017/")
 db = client["mydatabase"]  # Replace with your database name

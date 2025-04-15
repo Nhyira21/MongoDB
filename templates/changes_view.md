@@ -19,7 +19,6 @@
         :root {
             --bg-color: #e0e8f5;
             --text-color: #333;
-            --subtext-color: #666;
             --sidebar-bg: white;
             --header-bg: white;
             --content-bg: white;
@@ -37,10 +36,9 @@
         }
 
         /* Dark Theme */
-        [data-theme='dark'] {
+        html[data-theme='dark'] {
             --bg-color: #1a1a2e;
             --text-color: #e0e0e0;
-            --subtext-color: #a0a0a0;
             --sidebar-bg: #16213e;
             --header-bg: #16213e;
             --content-bg: #16213e;
@@ -446,9 +444,9 @@
 
             <div class="user-profile">
                 <!-- Theme Toggle Button -->
-                <button class="theme-toggle" id="theme-toggle">
+                <div class="theme-toggle" id="theme-toggle">
                     <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
+                </div>
                 
                 <div class="notification-bell">
                     <i class="far fa-bell"></i>
@@ -467,89 +465,21 @@
             </div>
         </header>
 
-        
+        <!-- Content Block -->
+        <div class="content">
             {% block content %}
-
+            <!-- Page specific content will be inserted here -->
             {% endblock %}
-      
+        </div>
     </main>
 
     <script>
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM fully loaded");
-            
-            // Initialize theme based on localStorage or default to light
-            function initializeTheme() {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                document.body.setAttribute('data-theme', savedTheme);
-                updateThemeIcon(savedTheme);
-                
-                // Display current theme for debugging
-                const themeDisplay = document.getElementById('current-theme');
-                if (themeDisplay) {
-                    themeDisplay.textContent = savedTheme;
-                }
-                
-                console.log("Theme initialized to:", savedTheme);
-            }
-            
-            // Update the theme icon based on current theme
-            function updateThemeIcon(theme) {
-                const themeIcon = document.getElementById('theme-icon');
-                if (themeIcon) {
-                    if (theme === 'dark') {
-                        themeIcon.classList.remove('fa-moon');
-                        themeIcon.classList.add('fa-sun');
-                    } else {
-                        themeIcon.classList.remove('fa-sun');
-                        themeIcon.classList.add('fa-moon');
-                    }
-                    console.log("Theme icon updated to:", theme === 'dark' ? 'sun' : 'moon');
-                }
-            }
-            
-            // Toggle between light and dark themes
-            function toggleTheme() {
-                console.log("Toggle theme clicked");
-                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                document.body.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                updateThemeIcon(newTheme);
-                
-                // Update theme display for debugging
-                const themeDisplay = document.getElementById('current-theme');
-                if (themeDisplay) {
-                    themeDisplay.textContent = newTheme;
-                }
-                
-                console.log("Theme toggled to:", newTheme);
-                
-                // Alert to confirm toggle worked (can remove in production)
-                
-            }
-            
-            // Set up theme toggle button
-            const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle) {
-                console.log("Theme toggle button found");
-                themeToggle.addEventListener('click', toggleTheme);
-            } else {
-                console.error("Theme toggle button not found");
-            }
-            
-            // Initialize the theme
-            initializeTheme();
-            
             // Set user information
-            const userName = "{{ current_user.name if current_user else 'Sarah' }}";
-            const userRole = "{{ current_user.role if current_user else 'Admin' }}";
-            const userInitial = userName ? userName[0] : 'S';
+            // In production, this would come from your Flask backend
+            const userName = "{{ current_user.name if current_user else 'Guest' }}";
+            const userRole = "{{ current_user.role if current_user else 'Visitor' }}";
+            const userInitial = userName ? userName[0] : 'G';
             
             document.getElementById('user-name').textContent = userName;
             document.getElementById('user-role').textContent = userRole;
@@ -591,9 +521,15 @@
                     navItems.forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
                 }
+                
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
 
             // Check if user is admin for admin-only items
+            // In production, this would be determined by the backend
             const isAdmin = userRole === 'Admin'; 
             const adminOnlyItems = document.querySelectorAll('.admin-only');
             
@@ -618,7 +554,44 @@
                     alert('Profile clicked - you would show a dropdown here');
                 });
             }
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or use default
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            htmlElement.setAttribute('data-theme', savedTheme);
+            
+            // Update icon based on current theme
+            updateThemeIcon(savedTheme);
+            
+            // Theme toggle click handler
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                updateThemeIcon(newTheme);
+            });
+            
+            // Function to update the theme icon
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            }
         });
+
+        // Add any additional JavaScript below
+        {% block scripts %}{% endblock %}
     </script>
 </body>
 
