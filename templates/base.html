@@ -398,7 +398,7 @@
             <span class="logo-text">ToyForge</span>
         </div>
         <div class="nav-items">
-            <a href="/" class="nav-item active">
+            <a href="/dashboard/" class="nav-item active">
                 <i class="fas fa-th-large nav-icon"></i>
                 <span class="nav-text">Dashboard</span>
             </a>
@@ -596,7 +596,7 @@
             // Set user information
             const userName = "{{ session['user'] if session['user'] else 'Sarah' }}";
             const userRole = "{{ current_user.role if current_user else 'Admin' }}";
-            const userInitial = userName ? userName[0] : 'S';
+            const userInitial = userName ? userName[0].toUpperCase() : 'S';
 
             document.getElementById('user-name').textContent = userName;
             document.getElementById('user-role').textContent = userRole;
@@ -628,17 +628,7 @@
                 });
             }
 
-            // Active navigation item
-            const navItems = document.querySelectorAll('.nav-item');
-            const currentPath = window.location.pathname;
-            
-            navItems.forEach(item => {
-                const href = item.getAttribute('href');
-                if (href === currentPath || (href === '/' && currentPath === '')) {
-                    navItems.forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                }
-            });
+           
 
             // Check if user is admin for admin-only items
             const isAdmin = userRole === 'Admin'; 
@@ -658,7 +648,19 @@
                 });
             }
             
-        
+            // Set the page title dynamically
+            const pageTitle = document.title;
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => {
+                const navText = item.querySelector('.nav-text').textContent.trim();
+                if (pageTitle.includes(navText)) {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                }else{
+                    console.log("Page title ", navText, " does not match any nav item text.");
+                }
+            });
         });
     </script>
 </body>

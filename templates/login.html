@@ -260,17 +260,21 @@
                     data: JSON.stringify({ username: username, password: password }),
                     contentType: "application/json",
                     success: function(response) {
-                        // Handle successful login response
                         if (response.message === 'Login successful') {
                             alert('Login successful');
                             window.location.href = "/dashboard"; // Replace with your dashboard page path
                         } else {
-                            console.log(response);
                             alert('Invalid username or password');
                         }
                     },
-                    error: function(error) {
-                        alert(error.message);
+                    error: function(xhr) {
+                        // Ensure the response is parsed correctly
+                        try {
+                            const error = JSON.parse(xhr.responseText);
+                            alert(error.error); // Display the error message
+                        } catch (e) {
+                            alert('An unexpected error occurred'); // Fallback for non-JSON responses
+                        }
                     }
                 });
                 
@@ -285,11 +289,41 @@
                 const password = document.getElementById('signupPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 
+                $.ajax({
+                    url: "{{ url_for('signup') }}",
+                    type: "POST",
+                    data: JSON.stringify({ username: username, email: email, password: password, confirmPassword: confirmPassword }),
+                    contentType: "application/json",
+                    success: function(response) {
+                        if (response.message === 'Account created successfully') {
+                            alert('Account created successfully');
+                            window.location.href = "/dashboard"; // Replace with your dashboard page path
+                        } else {
+                            alert('Error creating account');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Ensure the response is parsed correctly
+                        try {
+                            const error = JSON.parse(xhr.responseText);
+                            alert(error.error); // Display the error message
+                        } catch (e) {
+                            alert('An unexpected error occurred'); // Fallback for non-JSON responses
+                        }
+                    }
+                });
+
                 // Simple validation
                 if (username && email && password && confirmPassword) {
                     // Check if passwords match
                     if (password !== confirmPassword) {
                         alert('Passwords do not match');
+                        return;
+                    }
+                    
+                    // Check if username already exists
+                    if (user_collection.find_one({'name': username})) {
+                        alert('Username already exists');
                         return;
                     }
                     
