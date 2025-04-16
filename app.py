@@ -105,7 +105,30 @@ def edituser():
 
 @app.route('/products/')
 def products():
-    return render_template('product_listing.html')
+    product_collection = db["products"]
+    products = product_collection.find()
+
+    return render_template('product_listing.html', products=products)
+
+@app.route('/products/save', methods=['POST'])
+def save_product():
+    data = request.get_json()
+    product_collection = db["products"]
+    product_collection.insert_one(data)
+    return jsonify({"message": "Product added successfully"}), 201
+
+@app.route('/products/edit', methods=['POST'])
+def edit_product():
+    data = request.get_json()
+    product_collection = db["products"]
+    product_id = data.get('id')
+    print(data.get('id'), "::::::::::::::::::::::::::::::::::::::::")
+    del data['id']
+    if not product_id:
+        return jsonify({"error": "Product ID is required"}), 400
+    filter = {'id': product_id}
+    product_collection.find_one_and_update(filter, {'$set': data})
+    return jsonify({"message": "Product updated successfully"}), 201
 
 # ::::::::::::::::  --  p r o d u c t s
 
