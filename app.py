@@ -130,6 +130,10 @@ def delete_product():
     product_id = data.get('id')
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
+    try:
+        product_id = int(product_id)
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid Product ID"}), 400
     filter = {'id': product_id}
     product_collection.delete_one(filter)
     return jsonify({"message": "Product deleted successfully"}), 201
