@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, jsonify, request, render_template, session
 from pymongo import MongoClient
 
@@ -24,29 +25,42 @@ def login():
 
 @app.route('/login', methods=['POST'])
 def login_post():
-    # Fetch data from the ajax json form
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    print(username, password, ":::::::::::::::::::::::::::::::::::::::::::")
-
-    # fetch all users from mongodb collection
+    print(data, "::::::::::::::::::::::::::::::::::::::::")
     users = user_collection.find()
     for user in users:
-        print(user, ":::::::::::::::::::::::::::::::::::::::::::")
-        # Check if the username and password match
         if user['name'] == username and user['password'] == password:
             session['user'] = username
-            
             return jsonify({"message": "Login successful"}), 200
-        else:
-            print("f**^ ::::::::::::::::::")
-            return jsonify({"error": "Invalid username or password"}), 401
-    
+
+    # Return a proper error response
+    return jsonify({"error": "Invalid username or password"}), 401
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    return render_template("base.html")
+    # Fetch data from the ajax json form
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    
+    today = datetime.datetime.now()
+    today = today.strftime("%Y-%m-%d %H:%M:%S")
+    # Check if the username already exists
+    if user_collection.find_one({'name': username}):
+        return jsonify({"error": "Username already exists"}), 409
+
+
+    # Insert the new user into the database
+    new_user = {'name': username,'email': email, 'status':'active', 'password': password, 'created_at': today}
+    session['user'] = username
+    session['email'] = email
+    user_collection.insert_one(new_user)
+
+    return jsonify({"message": "Account created successfully"}), 201
+    
 
 
 @app.route('/edituser', methods=['POST'])
@@ -89,7 +103,10 @@ def products():
 
 
 
-
+# ::::::::::::::::::::::::::::::::::::::::  C A T E G O R I E S  ::::::::::::::::::::::::::::::::::::::::::: #
+@app.route('/categories/')
+def categories():
+    return render_template('categories.html')
 
 
 if __name__ == '__main__':
