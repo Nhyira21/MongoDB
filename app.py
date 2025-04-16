@@ -1,7 +1,7 @@
 import datetime
 from flask import Flask, jsonify, request, render_template, session
 from pymongo import MongoClient
-
+from pymongo import ReturnDocument
 app = Flask(__name__)
 app.secret_key = 'f8a9c4d6e9b7a2c3e5d8f0a1b4c6d7e8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6'
 
@@ -73,12 +73,12 @@ def signup():
 
 # :::::::::::::::::::::::::::::::::::::::   D A S H B O A R D   :::::::::::::::::::::::::::::::::::::::::: #
 @app.route('/dashboard/')
-def home():
+def home(): 
     return render_template("extendsbase.html")
 
 
 @app.route('/edituser', methods=['POST'])
-def edituser():
+def edit_user():
     data  = request.get_json()
     data['status'] = 'active'
     print(data['name'], "::::::::::::::::::::::::::::::::::::::::")
@@ -119,16 +119,39 @@ def save_product():
 
 @app.route('/products/edit', methods=['POST'])
 def edit_product():
+    
+
+    data = request.get_json()
+    data['status'] = 'out_of_stock'
+
+    print(data.get('productName'), "::::::::::::::::::::::::::::::::::::::::")
+    print(data, "::::::::::::::::::::::::::::::::::::::::")
+
+    filter = {'productName': data.get('productName')}
+    product_collection = db["products"]
+
+    product = product_collection.find_one_and_update(
+        filter,
+        {'$set': data},
+        return_document=ReturnDocument.AFTER,  # Correct usage
+        upsert=False  # Explicitly say no to upserts
+    )
+
+    if product:
+        return jsonify({"message": "Edit successful"}), 200
+    else:
+        return jsonify({"message": "Product not found"}), 404
+@app.route('/products/delete', methods=['POST'])
+def delete_product():
     data = request.get_json()
     product_collection = db["products"]
     product_id = data.get('id')
-    print(data.get('id'), "::::::::::::::::::::::::::::::::::::::::")
-    del data['id']
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
     filter = {'id': product_id}
-    product_collection.find_one_and_update(filter, {'$set': data})
-    return jsonify({"message": "Product updated successfully"}), 201
+    product_collection.delete_one(filter)
+    return jsonify({"message": "Product deleted successfully"}), 201
+
 
 # ::::::::::::::::  --  p r o d u c t s
 
@@ -144,13 +167,23 @@ def categories():
 # ::::::::::::::::  --  c a t e g o r i e s
 
 
+
+
 # ::::::::::::::::::::::::::::::::::::::  S A L E S  -   R E P O R T  ::::::::::::::::::::::::::::::::::::: #
 @app.route('/salesreport/')
 def salesreport():
     return render_template('sales_report.html')
 
+# ::::::::::::::::::::::::::::::  --  s a l e s  -  r e p o r t
 
 
+
+
+# :::::::::::::::::::::::::::::::::::::::  U S E R S  :::::::::::::::::::::::::::::::::::::::::::::::::: #
+@app.route('/users/')
+def users():
+    users = user_collection.find()
+    return render_template('users.html', users=users)
 
 if __name__ == '__main__':
     app.run(debug=True)

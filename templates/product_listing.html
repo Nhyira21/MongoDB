@@ -738,6 +738,26 @@
     document.querySelector('#deleteModal .confirm-button').addEventListener('click', function() {
         const productId = document.getElementById('deleteProductId').value;
         // Here you would typically make an AJAX call to delete the product
+        $.ajax({
+            url: "{{url_for('delete_product')}}",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: productId }),
+            success: function(response) {
+                // Handle success response
+                console.log('Product deleted successfully:', response);
+                // Remove the product row from the table
+                const row = document.querySelector(`.product-table .delete-button[data-id="${productId}"]`).closest('tr');
+                if (row) {
+                    row.remove();
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error('Error deleting product:', error);
+                alert('Error deleting product. Please try again.');
+            }
+        });
         alert(`Product with ID ${productId} would be deleted`);
         closeModal('deleteModal');
     });
@@ -766,7 +786,7 @@
                 category: row.querySelector('td:nth-child(2)').textContent,
                 price: parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('$', '')),
                 stock: parseInt(row.querySelector('td:nth-child(4)').textContent),
-                description: '' // Add logic to fetch description if available
+                description: row.querySelector('td:nth-child(5)').textContent
             };
             
             // For demonstration purposes, let's populate form with some sample data
@@ -782,7 +802,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify({
                     id: productId,
-                    name: productData.name,
+                    productName: productData.name,
                     category: productData.category,
                     price: productData.price,
                     stock: productData.stock,
@@ -936,7 +956,6 @@
     });
 
     // Sort dropdown functionality
-    
     sortDropdown.addEventListener('change', function() {
         const sortValue = this.value;
         // Here you would typically sort products based on the selected option
