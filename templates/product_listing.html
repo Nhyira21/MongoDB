@@ -430,166 +430,28 @@
                 </tr>
             </thead>
             <tbody>
+                {% for pr in products %}
                 <tr>
-                    <td>Teddy Bear (Large)</td>
-                    <td>Plush Toys</td>
-                    <td>$24.99</td>
-                    <td>45</td>
-                    <td><span class="status-badge in-stock">In Stock</span></td>
+                    <td>{{pr['productName']}}</td>
+                    <td>{{pr['category']}}</td>
+                    <td>{{pr['price']}}</td>
+                    <td>{{pr['stock']}}</td>
+                    <td><span class="status-badge {{pr['status']}}">{{pr['status']}}</span></td>
                     <td>
                         <div class="action-buttons">
-                            <button class="action-button view-button" data-id="1">
+                            <button class="action-button view-button" data-id="{{pr['id']}}">
                                 <i class="fas fa-eye"></i> View
                             </button>
-                            <button class="action-button edit-button" data-id="1">
+                            <button class="action-button edit-button" data-id="{{pr['id']}}">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button class="action-button delete-button" data-id="1">
+                            <button class="action-button delete-button" data-id="{{pr['id']}}">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>Super Hero Action Figure</td>
-                    <td>Action Figures</td>
-                    <td>$19.99</td>
-                    <td>32</td>
-                    <td><span class="status-badge in-stock">In Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="2">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="2">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="2">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Remote Control Race Car</td>
-                    <td>Electronic</td>
-                    <td>$39.99</td>
-                    <td>8</td>
-                    <td><span class="status-badge low-stock">Low Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="3">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="3">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="3">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Strategy Board Game</td>
-                    <td>Board Games</td>
-                    <td>$29.99</td>
-                    <td>0</td>
-                    <td><span class="status-badge out-of-stock">Out of Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="4">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="4">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="4">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Educational Puzzle Set</td>
-                    <td>Educational</td>
-                    <td>$15.99</td>
-                    <td>27</td>
-                    <td><span class="status-badge in-stock">In Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="5">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="5">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="5">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Collectible Doll Set</td>
-                    <td>Dolls</td>
-                    <td>$49.99</td>
-                    <td>12</td>
-                    <td><span class="status-badge in-stock">In Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="6">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="6">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="6">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Construction Block Set</td>
-                    <td>Educational</td>
-                    <td>$34.99</td>
-                    <td>5</td>
-                    <td><span class="status-badge low-stock">Low Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="7">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="7">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="7">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Toy Train Set</td>
-                    <td>Vehicles</td>
-                    <td>$59.99</td>
-                    <td>0</td>
-                    <td><span class="status-badge out-of-stock">Out of Stock</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button view-button" data-id="8">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="action-button edit-button" data-id="8">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-button delete-button" data-id="8">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
         
@@ -644,13 +506,13 @@
                 <div style="margin-bottom: 15px;">
                     <label for="productCategory" style="display: block; margin-bottom: 5px;">Category</label>
                     <select id="productCategory" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);" required>
-                        <option value="action-figures">Action Figures</option>
-                        <option value="board-games">Board Games</option>
-                        <option value="dolls">Dolls</option>
-                        <option value="educational">Educational</option>
-                        <option value="electronic">Electronic</option>
-                        <option value="plush">Plush Toys</option>
-                        <option value="vehicles">Vehicles</option>
+                        <option value="Action Figures">Action Figures</option>
+                        <option value="Board Games">Board Games</option>
+                        <option value="Dolls">Dolls</option>
+                        <option value="Educational">Educational</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Plush Toys">Plush Toys</option>
+                        <option value="Vehicles">Vehicles</option>
                     </select>
                 </div>
                 <div style="margin-bottom: 15px;">
@@ -876,6 +738,26 @@
     document.querySelector('#deleteModal .confirm-button').addEventListener('click', function() {
         const productId = document.getElementById('deleteProductId').value;
         // Here you would typically make an AJAX call to delete the product
+        $.ajax({
+            url: "{{url_for('delete_product')}}",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: productId }),
+            success: function(response) {
+                // Handle success response
+                console.log('Product deleted successfully:', response);
+                // Remove the product row from the table
+                const row = document.querySelector(`.product-table .delete-button[data-id="${productId}"]`).closest('tr');
+                if (row) {
+                    row.remove();
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error('Error deleting product:', error);
+                alert('Error deleting product. Please try again.');
+            }
+        });
         alert(`Product with ID ${productId} would be deleted`);
         closeModal('deleteModal');
     });
@@ -892,17 +774,19 @@
     document.querySelectorAll('.edit-button').forEach(button => {
         button.addEventListener('click', function() {
             const productId = this.getAttribute('data-id');
+            console.log(productId);
             document.getElementById('productModalTitle').textContent = 'Edit Product';
             document.getElementById('productId').value = productId;
-            
-            // Here you would typically fetch product data and populate the form
-            // This is a simplified example with hardcoded data
-            let productData = {
-                name: 'Sample Product',
-                category: 'plush',
-                price: 29.99,
-                stock: 15,
-                description: 'This is a sample product description.'
+            // fetch current row
+            const row = this.closest('tr');
+            // fetch the id from the action buttons property data-id
+            const productData = {
+                id: productId,
+                name: row.querySelector('td:nth-child(1)').textContent,
+                category: row.querySelector('td:nth-child(2)').textContent,
+                price: parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('$', '')),
+                stock: parseInt(row.querySelector('td:nth-child(4)').textContent),
+                description: row.querySelector('td:nth-child(5)').textContent
             };
             
             // For demonstration purposes, let's populate form with some sample data
@@ -912,6 +796,36 @@
             document.getElementById('productStock').value = productData.stock;
             document.getElementById('productDescription').value = productData.description;
             
+            $.ajax({
+                url: '{{url_for("edit_product")}}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: productId,
+                    productName: productData.name,
+                    category: productData.category,
+                    price: productData.price,
+                    stock: productData.stock,
+                    description: productData.description
+                }),
+                success: function(response) {
+                    // Handle success response
+                    console.log('Product data fetched successfully:', response);
+                    // update row with new data
+                    // Update the row with new data
+                    row.querySelector('td:nth-child(1)').textContent = productData.name;
+                    row.querySelector('td:nth-child(2)').textContent = productData.category;
+                    row.querySelector('td:nth-child(3)').textContent = `$${productData.price.toFixed(2)}`;
+                    row.querySelector('td:nth-child(4)').textContent = productData.stock;
+                    row.querySelector('.status-badge').textContent = productData.stock > 10 ? 'In Stock' : productData.stock > 0 ? 'Low Stock' : 'Out of Stock';
+                    row.querySelector('.status-badge').className = `status-badge ${productData.stock > 10 ? 'in-stock' : productData.stock > 0 ? 'low-stock' : 'out-of-stock'}`;
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error('Error fetching product data:', error);
+                    alert('Error fetching product data. Please try again.');
+                }
+            });
             openModal('productModal');
         });
     });
@@ -930,9 +844,70 @@
             return;
         }
         
+        // fetch highest id in .product-table tbody column 5 button data-id property
+        const rows = document.querySelectorAll('.product-table tbody tr');
+        let highestId = 0;
+        rows.forEach(row => {
+            const id = parseInt(row.querySelector('.action-button.edit-button').getAttribute('data-id'));
+            if (id > highestId) {
+                highestId = id;
+            }
+        });
+        
+        // Increment the highest ID for the new product
+        const newId = highestId + 1;
         // Here you would typically make an AJAX call to save the product
         const action = productId ? 'updated' : 'created';
-        alert(`Product would be ${action}: ${productName}`);
+        $.ajax({
+            url: '{{url_for("save_product")}}',
+            type: 'POST',
+            data: JSON.stringify({
+                id: newId,
+                productName: productName,
+                category: category,
+                price: price,
+                stock: stock,
+                description: description
+            }),
+            contentType: 'application/json',
+            success: function(response) {
+                // Handle success response
+                console.log('Product saved successfully:', response);
+                alert(`Product would be ${action}: ${productName}`);
+                 // Dynamically add the new product to the table
+                 $('.product-table tbody').append(`
+                            <tr>
+                                <td>${productName}</td>
+                                <td>${category}</td>
+                                <td>${price}</td>
+                                
+                                <td>${stock}</td>
+                                <td><span class="status-badge in-stock">In Stock</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                    <button class="action-button view-button" data-id="${newId}">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <button class="action-button edit-button" data-id="${newId}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-button delete-button" data-id="${newId}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    </div>
+                                </td>
+                            </tr>
+                `);
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error('Error saving product:', error);
+            }
+        });
+
+        
+        
         closeModal('productModal');
     });
 
@@ -981,7 +956,6 @@
     });
 
     // Sort dropdown functionality
-    
     sortDropdown.addEventListener('change', function() {
         const sortValue = this.value;
         // Here you would typically sort products based on the selected option
@@ -998,15 +972,18 @@
             if (stockCell && statusCell) {
                 const stockValue = parseInt(stockCell.textContent);
                 
-                if (stockValue === 0) {
+                if (stockValue == 0) {
                     statusCell.className = 'status-badge out-of-stock';
                     statusCell.textContent = 'Out of Stock';
-                } else if (stockValue <= 10) {
+                    console.log('out', stockValue);
+                } else if (stockValue > 0 && stockValue <= 10) {
                     statusCell.className = 'status-badge low-stock';
                     statusCell.textContent = 'Low Stock';
+                    console.log('low', stockValue);
                 } else {
                     statusCell.className = 'status-badge in-stock';
                     statusCell.textContent = 'In Stock';
+                    console.log('in', stockValue);
                 }
             }
         });
