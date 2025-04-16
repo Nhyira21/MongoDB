@@ -1,0 +1,718 @@
+{% extends "base.html" %}
+
+{% block title %}Categories{% endblock %}
+
+{% block styles %}
+<style>
+        :root {
+            --content-bg: #ffffff;
+            --bg-color: #f5f5f7;
+            --text-color: #333;
+            --subtext-color: #666;
+            --border-color: #e1e1e1;
+            --hover-color: #f0f0f0;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode {
+            --content-bg: #1e1e2d;
+            --bg-color: #151521;
+            --text-color: #e0e0e0;
+            --subtext-color: #aaa;
+            --border-color: #2c2c40;
+            --hover-color: #2a2a3a;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .categories-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .categories-card {
+            background-color: var(--content-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .category-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .category-table th, 
+        .category-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-table th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .category-table tr:hover {
+            background-color: var(--hover-color);
+        }
+
+        .category-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+
+        .status-inactive {
+            background-color: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        .edit-button:hover {
+            color: #3498db;
+        }
+
+        .delete-button:hover {
+            color: #e74c3c;
+        }
+
+        .add-category-button {
+            background-color: #4a86f7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        .add-category-button:hover {
+            background-color: #3a76e7;
+        }
+
+        .category-count {
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--subtext-color);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin: 10px 0 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .categories-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .action-cell {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+{% endblock %}    
+{% block content %}
+<body>
+    <div class="categories-card">
+        <div class="categories-header">
+            <div>
+                <h1>Categories Management</h1>
+                <p>Manage your product categories</p>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="category-count">
+                    <span id="category-count">5</span> Categories
+                </div>
+                <button class="add-category-button" id="add-category-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Category
+                </button>
+            </div>
+        </div>
+
+        <table class="category-table">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Description</th>
+                    <th>Products</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="categories-tbody">
+                <tr>
+                    <td>Puzzles</td>
+                    <td>Brain teasers and puzzles for all ages</td>
+                    <td>124</td>
+                    <td><span class="category-status status-active">Active</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="1">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="1">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Action Figures</td>
+                    <td>Character figures from popular franchises</td>
+                    <td>210</td>
+                    <td><span class="category-status status-active">Active</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="2">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="2">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Dolls</td>
+                    <td>Fashion and character dolls</td>
+                    <td>156</td>
+                    <td><span class="category-status status-active">Active</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="3">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Board Games</td>
+                    <td>Family board games and card games</td>
+                    <td>87</td>
+                    <td><span class="category-status status-active">Active</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="4">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="4">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Educational Toys</td>
+                    <td>Learning and development toys</td>
+                    <td>93</td>
+                    <td><span class="category-status status-inactive">Inactive</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="5">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="5">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Empty state (hidden by default) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <i class="fas fa-box-open"></i>
+            <h3>No Categories Found</h3>
+            <p>Start by adding your first product category</p>
+        </div>
+    </div>
+
+    <script>
+        // Create a modal class to handle the creation and display of modals
+        class ModalCreator {
+            /**
+             * Create a modal based on a configuration object.
+             * @param {Object} config - Configuration for the modal.
+             * @param {string} config.modalId - An ID for the modal container.
+             * @param {string} config.title - Title of the modal.
+             * @param {Array<Object>} config.fields - An array of field config objects.
+             *        Each field object can have:
+             *          - label: The label text for the field.
+             *          - type: The type of field ("text", "number", "email", "password", "textarea", "select", "datalist", etc.).
+             *          - placeholder: Placeholder text (if applicable).
+             *          - name: The name attribute for the field.
+             *          - options: (for select) an array of options (each option can be a string or an object with 'value' and 'text').
+             *          - dataList: (for inputs with datalist) an array of items for the datalist.
+             * @param {Function} config.onSubmit - Callback function when form is submitted.
+             */
+            constructor(config) {
+                this.config = config;
+                this.modalId = config.modalId || 'modal';
+                this.createModal();
+            }
+
+            createModal() {
+                // Create modal container if not already present
+                if (document.getElementById(this.modalId)) {
+                    this.modal = document.getElementById(this.modalId);
+                    return;
+                }
+                this.modal = document.createElement('div');
+                this.modal.id = this.modalId;
+                Object.assign(this.modal.style, {
+                    position: 'fixed',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'none',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: '1000'
+                });
+
+                // Create modal content container
+                const modalContent = document.createElement('div');
+                Object.assign(modalContent.style, {
+                    backgroundColor: 'var(--content-bg)',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    width: '90%',
+                    maxWidth: '500px',
+                    position: 'relative',
+                    boxSizing: 'border-box'
+                });
+                
+                // Create close button
+                const closeButton = document.createElement('span');
+                closeButton.innerHTML = '&times;';
+                Object.assign(closeButton.style, {
+                    position: 'absolute',
+                    top: '10px',
+                    right: '15px',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    color: 'var(--text-color)'
+                });
+                closeButton.addEventListener('click', () => this.close());
+                modalContent.appendChild(closeButton);
+
+                // Modal header
+                const header = document.createElement('h2');
+                header.textContent = this.config.title || 'Modal Title';
+                header.style.marginBottom = '15px';
+                header.style.color = 'var(--text-color)';
+                modalContent.appendChild(header);
+
+                // Create form container
+                const form = document.createElement('form');
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    if (typeof this.config.onSubmit === 'function') {
+                        // Gather form data into an object
+                        const formData = {};
+                        this.config.fields.forEach(field => {
+                            if (field.name) {
+                                const input = form.querySelector(`[name="${field.name}"]`);
+                                if (input) {
+                                    formData[field.name] = input.value;
+                                }
+                            }
+                        });
+                        this.config.onSubmit(formData);
+                    }
+                    this.close();
+                });
+
+                // Create input elements based on fields config
+                this.config.fields.forEach((field, index) => {
+                    const fieldWrapper = document.createElement('div');
+                    fieldWrapper.style.marginBottom = '15px';
+
+                    // Optional label
+                    if (field.label) {
+                        const label = document.createElement('label');
+                        label.textContent = field.label;
+                        label.style.display = 'block';
+                        label.style.marginBottom = '5px';
+                        label.style.color = 'var(--text-color)';
+                        fieldWrapper.appendChild(label);
+                    }
+
+                    let inputElement;
+                    switch (field.type) {
+                        case 'textarea':
+                            inputElement = document.createElement('textarea');
+                            break;
+                        case 'select':
+                            inputElement = document.createElement('select');
+                            if (Array.isArray(field.options)) {
+                                field.options.forEach(optionItem => {
+                                    const option = document.createElement('option');
+                                    if (typeof optionItem === 'object') {
+                                        option.value = optionItem.value;
+                                        option.textContent = optionItem.text;
+                                    } else {
+                                        option.value = optionItem;
+                                        option.textContent = optionItem;
+                                    }
+                                    inputElement.appendChild(option);
+                                });
+                            }
+                            break;
+                        case 'datalist': {
+                            // For datalist, create an input and associated datalist element.
+                            inputElement = document.createElement('input');
+                            inputElement.type = 'text';
+                            const dataListId = `${this.modalId}-datalist-${index}`;
+                            inputElement.setAttribute('list', dataListId);
+                            const dataList = document.createElement('datalist');
+                            dataList.id = dataListId;
+                            if (Array.isArray(field.dataList)) {
+                                field.dataList.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.value = item;
+                                    dataList.appendChild(option);
+                                });
+                            }
+                            fieldWrapper.appendChild(dataList);
+                            break;
+                        }
+                        default:
+                            // default to input element using the specified type (text, number, email, etc.)
+                            inputElement = document.createElement('input');
+                            inputElement.type = field.type || 'text';
+                    }
+
+                    // Set common attributes if provided
+                    if (field.placeholder) {
+                        inputElement.placeholder = field.placeholder;
+                    }
+                    if (field.name) {
+                        inputElement.name = field.name;
+                    }
+                    if (field.value) {
+                        inputElement.value = field.value;
+                    }
+                    Object.assign(inputElement.style, {
+                        width: '100%',
+                        padding: '8px',
+                        color: 'var(--text-color)',
+                        backgroundColor: 'var(--bg-color)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '4px',
+                        boxSizing: 'border-box'
+                    });
+
+                    fieldWrapper.appendChild(inputElement);
+                    form.appendChild(fieldWrapper);
+                });
+
+                // Create submit button
+                const submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.textContent = this.config.submitText || 'Submit';
+                Object.assign(submitButton.style, {
+                    padding: '10px 15px',
+                    backgroundColor: '#4a86f7',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                });
+                form.appendChild(submitButton);
+
+                modalContent.appendChild(form);
+                this.modal.appendChild(modalContent);
+                document.body.appendChild(this.modal);
+
+                // Close modal when clicking outside the content
+                this.modal.addEventListener('click', e => {
+                    if (e.target === this.modal) {
+                        this.close();
+                    }
+                });
+            }
+
+            open() {
+                this.modal.style.display = 'flex';
+            }
+
+            close() {
+                this.modal.style.display = 'none';
+            }
+        }
+
+        // Sample category data
+        const categories = [
+            { id: 1, name: 'Puzzles', description: 'Brain teasers and puzzles for all ages', products: 124, status: 'active' },
+            { id: 2, name: 'Action Figures', description: 'Character figures from popular franchises', products: 210, status: 'active' },
+            { id: 3, name: 'Dolls', description: 'Fashion and character dolls', products: 156, status: 'active' },
+            { id: 4, name: 'Board Games', description: 'Family board games and card games', products: 87, status: 'active' },
+            { id: 5, name: 'Educational Toys', description: 'Learning and development toys', products: 93, status: 'inactive' }
+        ];
+
+        // Function to handle adding a new category
+        function addCategory(formData) {
+            // In a real application, you would send this data to your backend
+            console.log('Adding new category:', formData);
+            
+            // For demo purposes, we'll add the category to our local array
+            const newId = categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1;
+            categories.push({
+                id: newId,
+                name: formData.categoryName,
+                description: formData.description,
+                products: 0,
+                status: formData.status
+            });
+            
+            // Update the UI
+            renderCategories();
+            updateCategoryCount();
+        }
+
+        // Function to handle editing a category
+        function editCategory(id, formData) {
+            // In a real application, you would send this data to your backend
+            console.log('Editing category:', id, formData);
+            
+            // For demo purposes, we'll update the category in our local array
+            const index = categories.findIndex(c => c.id === id);
+            if (index !== -1) {
+                categories[index] = {
+                    ...categories[index],
+                    name: formData.categoryName,
+                    description: formData.description,
+                    status: formData.status
+                };
+                
+                // Update the UI
+                renderCategories();
+            }
+        }
+
+        // Function to handle deleting a category
+        function deleteCategory(id) {
+            // In a real application, you would send a delete request to your backend
+            console.log('Deleting category:', id);
+            
+            // For demo purposes, we'll remove the category from our local array
+            const index = categories.findIndex(c => c.id === id);
+            if (index !== -1) {
+                categories.splice(index, 1);
+                
+                // Update the UI
+                renderCategories();
+                updateCategoryCount();
+            }
+        }
+
+        // Function to render categories in the table
+        function renderCategories() {
+            const tbody = document.getElementById('categories-tbody');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Clear the current table content
+            tbody.innerHTML = '';
+            
+            // Show empty state if no categories
+            if (categories.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            // Hide empty state if we have categories
+            emptyState.style.display = 'none';
+            
+            // Render each category as a table row
+            categories.forEach(category => {
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${category.name}</td>
+                    <td>${category.description}</td>
+                    <td>${category.products}</td>
+                    <td><span class="category-status status-${category.status}">${category.status.charAt(0).toUpperCase() + category.status.slice(1)}</span></td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="action-button edit-button" data-id="${category.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-button delete-button" data-id="${category.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Add event listeners to new buttons
+            addButtonEventListeners();
+        }
+
+        // Function to update the category count
+        function updateCategoryCount() {
+            const countElement = document.getElementById('category-count');
+            countElement.textContent = categories.length;
+        }
+
+        // Function to add event listeners to edit and delete buttons
+        function addButtonEventListeners() {
+            // Edit button event listeners
+            document.querySelectorAll('.edit-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const categoryId = parseInt(this.getAttribute('data-id'));
+                    const category = categories.find(c => c.id === categoryId);
+                    
+                    if (category) {
+                        // Create edit modal configuration
+                        const editModalConfig = {
+                            modalId: 'editCategoryModal',
+                            title: 'Edit Category',
+                            submitText: 'Save Changes',
+                            fields: [
+                                { label: 'Category Name', type: 'text', name: 'categoryName', value: category.name },
+                                { label: 'Description', type: 'textarea', name: 'description', value: category.description },
+                                {
+                                    label: 'Status',
+                                    type: 'select',
+                                    name: 'status',
+                                    options: [
+                                        { value: 'active', text: 'Active' },
+                                        { value: 'inactive', text: 'Inactive' }
+                                    ],
+                                    value: category.status
+                                }
+                            ],
+                            onSubmit: (formData) => {
+                                editCategory(categoryId, formData);
+                            }
+                        };
+                        
+                        // Create and open the edit modal
+                        const editModal = new ModalCreator(editModalConfig);
+                        editModal.open();
+                    }
+                });
+            });
+            
+            // Delete button event listeners
+            document.querySelectorAll('.delete-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const categoryId = parseInt(this.getAttribute('data-id'));
+                    if (confirm('Are you sure you want to delete this category?')) {
+                        deleteCategory(categoryId);
+                    }
+                });
+            });
+        }
+
+        // Add category button click handler
+        document.getElementById('add-category-btn').addEventListener('click', function() {
+            // Create add modal configuration
+            const addModalConfig = {
+                modalId: 'addCategoryModal',
+                title: 'Add New Category',
+                submitText: 'Add Category',
+                fields: [
+                    { label: 'Category Name', type: 'text', placeholder: 'Enter category name', name: 'categoryName' },
+                    { label: 'Description', type: 'textarea', placeholder: 'Enter category description', name: 'description' },
+                    {
+                        label: 'Status',
+                        type: 'select',
+                        name: 'status',
+                        options: [
+                            { value: 'active', text: 'Active' },
+                            { value: 'inactive', text: 'Inactive' }
+                        ]
+                    }
+                ],
+                onSubmit: addCategory
+            };
+            
+            // Create and open the add modal
+            const addModal = new ModalCreator(addModalConfig);
+            addModal.open();
+        });
+
+        // Initialize the page
+        function init() {
+            renderCategories();
+            updateCategoryCount();
+        }
+
+        // Run initialization when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+{% endblock %}
