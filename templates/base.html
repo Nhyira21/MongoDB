@@ -482,7 +482,7 @@
             modalId: 'EditUserModal', // Unique identifier for the modal
             title: 'Edit Your Data',
             fields: [
-                { label: 'Username', type: 'text', placeholder: 'Enter new username', name: 'username' },
+                { label: 'Username', type: 'text', placeholder: 'Enter new username', name: 'name' },
                 { label: 'Email', type: 'email', name: 'email', placeholder: 'Enter New email'},
                 { label: 'Password', type: 'Password', name: 'password', placeholder: 'Enter new Password' },
             ],
@@ -496,7 +496,9 @@
                     success: function(response){
                         if (response.message === 'Edit successful') {
                             alert('Edit successful');
-                             // Replace with your dashboard page path
+                            // refresh page
+                            location.reload();
+                            
                         } else {
                             console.log(response);
                             alert('Invalid username or password');

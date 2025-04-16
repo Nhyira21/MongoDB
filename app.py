@@ -38,6 +38,8 @@ def login_post():
     # Return a proper error response
     return jsonify({"error": "Invalid username or password"}), 401
 
+
+
 @app.route('/signup', methods=['POST'])
 def signup():
     # Fetch data from the ajax json form
@@ -60,16 +62,6 @@ def signup():
     user_collection.insert_one(new_user)
 
     return jsonify({"message": "Account created successfully"}), 201
-    
-
-
-@app.route('/edituser', methods=['POST'])
-def edituser():
-    data  = request.get_json()
-    filter = {'name': data['username']}
-    user = user_collection.find_one_and_update
-    print(data)
-    return jsonify({"message": "Edit successful"}), 201
 
 
 # ::::::::::::::::  --  l o g i n  &  s i g n u p 
@@ -85,7 +77,24 @@ def home():
     return render_template("extendsbase.html")
 
 
-# ::::::::::::::::  --  d a s h b o a r d 
+@app.route('/edituser', methods=['POST'])
+def edituser():
+    data  = request.get_json()
+    data['status'] = 'active'
+    print(data['name'], "::::::::::::::::::::::::::::::::::::::::")
+    filter = {'name': session['user']}
+    user = user_collection.find_one_and_update(
+        filter,
+        {'$set': data},
+        return_document=True
+    )
+    session['user'] = data['name']
+    session['email'] = data['email']
+    print(user_collection.find(), "::::::::::::::::::::::::::::::::::::::::")
+    return jsonify({"message": "Edit successful"}), 201
+
+
+# ::::::::::::::::  --  d a s h b o sa r d 
 
 
 
@@ -107,6 +116,17 @@ def products():
 @app.route('/categories/')
 def categories():
     return render_template('categories.html')
+
+
+# ::::::::::::::::  --  c a t e g o r i e s
+
+
+# ::::::::::::::::::::::::::::::::::::::  S A L E S  -   R E P O R T  ::::::::::::::::::::::::::::::::::::: #
+@app.route('/salesreport/')
+def salesreport():
+    return render_template('sales_report.html')
+
+
 
 
 if __name__ == '__main__':
