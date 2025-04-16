@@ -2,7 +2,7 @@
 
 {% block title %}Categories{% endblock %}
 
-{% block styles %}
+{% block content %}
 <style>
         :root {
             --content-bg: #ffffff;
@@ -29,7 +29,6 @@
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
         }
 
         .categories-header {
@@ -170,9 +169,7 @@
                 gap: 8px;
             }
         }
-    </style>
-{% endblock %}    
-{% block content %}
+</style>
 <body>
     <div class="categories-card">
         <div class="categories-header">
