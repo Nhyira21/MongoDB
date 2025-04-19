@@ -113,34 +113,16 @@ def products():
 @app.route('/products/save', methods=['POST'])
 def save_product():
     data = request.get_json()
+    data['id'] = int(data.get('id'))
     product_collection = db["products"]
-    product_collection.insert_one(data)
+    filter = {'id': data['id']}
+    try:
+        product_collection.update_one(filter, {'$set': data}, upsert=True)
+    except Exception as e:
+        return jsonify({"error": f"An error occurred while saving the product: {str(e)}"}), 500
     return jsonify({"message": "Product added successfully"}), 201
 
-@app.route('/products/edit', methods=['POST'])
-def edit_product():
-    
 
-    data = request.get_json()
-    data['status'] = 'out_of_stock'
-
-    print(data.get('productName'), "::::::::::::::::::::::::::::::::::::::::")
-    print(data, "::::::::::::::::::::::::::::::::::::::::")
-
-    filter = {'productName': data.get('productName')}
-    product_collection = db["products"]
-
-    product = product_collection.find_one_and_update(
-        filter,
-        {'$set': data},
-        return_document=ReturnDocument.AFTER,  # Correct usage
-        upsert=False  # Explicitly say no to upserts
-    )
-
-    if product:
-        return jsonify({"message": "Edit successful"}), 200
-    else:
-        return jsonify({"message": "Product not found"}), 404
 @app.route('/products/delete', methods=['POST'])
 def delete_product():
     data = request.get_json()
@@ -148,6 +130,10 @@ def delete_product():
     product_id = data.get('id')
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
+    try:
+        product_id = int(product_id)
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid Product ID"}), 400
     filter = {'id': product_id}
     product_collection.delete_one(filter)
     return jsonify({"message": "Product deleted successfully"}), 201

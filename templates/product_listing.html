@@ -256,7 +256,8 @@
         transition: background-color 0.3s;
     }
 
-    .page-button:hover, .page-button.active {
+    .page-button:hover,
+    .page-button.active {
         background-color: #4a86f7;
         color: white;
         border-color: #4a86f7;
@@ -336,13 +337,13 @@
         background-color: #e74c3c;
         color: white;
     }
-    
+
     /* Responsive Design */
     @media (max-width: 992px) {
         .filter-actions-bar {
             grid-template-columns: 1fr;
         }
-        
+
         .sort-controls {
             justify-content: flex-start;
         }
@@ -352,12 +353,12 @@
         .action-buttons {
             flex-direction: column;
         }
-        
+
         .header-card {
             flex-direction: column;
             text-align: center;
         }
-        
+
         .header-text {
             align-items: center;
             margin-bottom: 20px;
@@ -454,7 +455,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
         <!-- Pagination Controls -->
         <div class="pagination">
             <div class="page-info">
@@ -501,11 +502,15 @@
                 <input type="hidden" id="productId">
                 <div style="margin-bottom: 15px;">
                     <label for="productName" style="display: block; margin-bottom: 5px;">Product Name</label>
-                    <input type="text" id="productName" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);" required>
+                    <input type="text" id="productName"
+                        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"
+                        required>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label for="productCategory" style="display: block; margin-bottom: 5px;">Category</label>
-                    <select id="productCategory" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);" required>
+                    <select id="productCategory"
+                        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"
+                        required>
                         <option value="Action Figures">Action Figures</option>
                         <option value="Board Games">Board Games</option>
                         <option value="Dolls">Dolls</option>
@@ -517,21 +522,27 @@
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label for="productPrice" style="display: block; margin-bottom: 5px;">Price ($)</label>
-                    <input type="number" id="productPrice" min="0" step="0.01" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);" required>
+                    <input type="number" id="productPrice" min="0" step="0.01"
+                        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"
+                        required>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label for="productStock" style="display: block; margin-bottom: 5px;">Stock Quantity</label>
-                    <input type="number" id="productStock" min="0" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);" required>
+                    <input type="number" id="productStock" min="0"
+                        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"
+                        required>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label for="productDescription" style="display: block; margin-bottom: 5px;">Description</label>
-                    <textarea id="productDescription" rows="4" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"></textarea>
+                    <textarea id="productDescription" rows="4"
+                        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color);"></textarea>
                 </div>
             </form>
         </div>
         <div class="modal-footer">
             <button class="modal-button cancel-button">Cancel</button>
-            <button class="modal-button confirm-button" style="background-color: #4a86f7;" id="saveProductButton">Save Product</button>
+            <button class="modal-button confirm-button" style="background-color: #4a86f7;" id="saveProductButton">Save
+                Product</button>
         </div>
     </div>
 </div>
@@ -546,142 +557,142 @@
 
     // State
     let filterState = {
-    searchTerm: '',
-    category: '',
-    stock: '',
-    sort: 'name-asc'
+        searchTerm: '',
+        category: '',
+        stock: '',
+        sort: 'name-asc'
     };
 
     // Event handlers
     function handleSearch(e) {
-    filterState.searchTerm = e.target.value.toLowerCase().trim();
-    applyFilters();
+        filterState.searchTerm = e.target.value.toLowerCase().trim();
+        applyFilters();
     }
 
     function handleCategoryFilter(e) {
-    filterState.category = e.target.value;
-    applyFilters();
+        filterState.category = e.target.value;
+        applyFilters();
     }
 
     function handleStockFilter(e) {
-    filterState.stock = e.target.value;
-    applyFilters();
+        filterState.stock = e.target.value;
+        applyFilters();
     }
 
     function handleSort(e) {
-    filterState.sort = e.target.value;
-    applyFilters();
+        filterState.sort = e.target.value;
+        applyFilters();
     }
 
     function handleAddProduct() {
-    document.getElementById('productModalTitle').textContent = 'Add New Product';
-    document.getElementById('productId').value = '';
-    document.getElementById('productForm').reset();
-    document.getElementById('productModal').style.display = 'flex';
+        document.getElementById('productModalTitle').textContent = 'Add New Product';
+        document.getElementById('productId').value = '';
+        document.getElementById('productForm').reset();
+        document.getElementById('productModal').style.display = 'flex';
     }
 
     // Filter and sort implementation
     function applyFilters() {
-    const rows = Array.from(document.querySelectorAll('.product-table tbody tr'));
-    
-    rows.forEach(row => {
-        row.style.display = 'none'; // Hide all rows initially
-        
-        const productName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-        const category = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        const stockValue = parseInt(row.querySelector('td:nth-child(4)').textContent);
-        const statusElement = row.querySelector('.status-badge');
-        const stockStatus = statusElement ? statusElement.textContent.toLowerCase() : '';
-        
-        // Apply search filter
-        const matchesSearch = filterState.searchTerm === '' || 
-                            productName.includes(filterState.searchTerm) || 
-                            category.includes(filterState.searchTerm);
-        
-        // Apply category filter
-        const matchesCategory = filterState.category === '' || 
-                            category.includes(filterState.category.toLowerCase().replace('-', ' '));
-        
-        // Apply stock filter
-        let matchesStock = true;
-        if (filterState.stock === 'in-stock') {
-        matchesStock = stockValue > 10;
-        } else if (filterState.stock === 'low-stock') {
-        matchesStock = stockValue > 0 && stockValue <= 10;
-        } else if (filterState.stock === 'out-of-stock') {
-        matchesStock = stockValue === 0;
-        }
-        
-        // Show row if it matches all filters
-        if (matchesSearch && matchesCategory && matchesStock) {
-        row.style.display = '';
-        }
-    });
-    
-    // Sort the visible rows
-    sortProducts(filterState.sort);
-    
-    // Update pagination after filtering
-    updatePagination();
+        const rows = Array.from(document.querySelectorAll('.product-table tbody tr'));
+
+        rows.forEach(row => {
+            row.style.display = 'none'; // Hide all rows initially
+
+            const productName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+            const category = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const stockValue = parseInt(row.querySelector('td:nth-child(4)').textContent);
+            const statusElement = row.querySelector('.status-badge');
+            const stockStatus = statusElement ? statusElement.textContent.toLowerCase() : '';
+
+            // Apply search filter
+            const matchesSearch = filterState.searchTerm === '' ||
+                productName.includes(filterState.searchTerm) ||
+                category.includes(filterState.searchTerm);
+
+            // Apply category filter
+            const matchesCategory = filterState.category === '' ||
+                category.includes(filterState.category.toLowerCase().replace('-', ' '));
+
+            // Apply stock filter
+            let matchesStock = true;
+            if (filterState.stock === 'in-stock') {
+                matchesStock = stockValue > 10;
+            } else if (filterState.stock === 'low-stock') {
+                matchesStock = stockValue > 0 && stockValue <= 10;
+            } else if (filterState.stock === 'out-of-stock') {
+                matchesStock = stockValue === 0;
+            }
+
+            // Show row if it matches all filters
+            if (matchesSearch && matchesCategory && matchesStock) {
+                row.style.display = '';
+            }
+        });
+
+        // Sort the visible rows
+        sortProducts(filterState.sort);
+
+        // Update pagination after filtering
+        updatePagination();
     }
 
     function sortProducts(sortBy) {
-    const tbody = document.querySelector('.product-table tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
-    
-    rows.sort((a, b) => {
-        switch(sortBy) {
-        case 'name-asc':
-            return a.cells[0].textContent.localeCompare(b.cells[0].textContent);
-        case 'name-desc':
-            return b.cells[0].textContent.localeCompare(a.cells[0].textContent);
-        case 'price-asc':
-            return parseFloat(a.cells[2].textContent.replace('$', '')) - 
-                parseFloat(b.cells[2].textContent.replace('$', ''));
-        case 'price-desc':
-            return parseFloat(b.cells[2].textContent.replace('$', '')) - 
-                parseFloat(a.cells[2].textContent.replace('$', ''));
-        case 'stock-asc':
-            return parseInt(a.cells[3].textContent) - parseInt(b.cells[3].textContent);
-        case 'stock-desc':
-            return parseInt(b.cells[3].textContent) - parseInt(a.cells[3].textContent);
-        default:
-            return 0;
-        }
-    });
-    
-    // Reorder the DOM elements
-    rows.forEach(row => tbody.appendChild(row));
+        const tbody = document.querySelector('.product-table tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+
+        rows.sort((a, b) => {
+            switch (sortBy) {
+                case 'name-asc':
+                    return a.cells[0].textContent.localeCompare(b.cells[0].textContent);
+                case 'name-desc':
+                    return b.cells[0].textContent.localeCompare(a.cells[0].textContent);
+                case 'price-asc':
+                    return parseFloat(a.cells[2].textContent.replace('$', '')) -
+                        parseFloat(b.cells[2].textContent.replace('$', ''));
+                case 'price-desc':
+                    return parseFloat(b.cells[2].textContent.replace('$', '')) -
+                        parseFloat(a.cells[2].textContent.replace('$', ''));
+                case 'stock-asc':
+                    return parseInt(a.cells[3].textContent) - parseInt(b.cells[3].textContent);
+                case 'stock-desc':
+                    return parseInt(b.cells[3].textContent) - parseInt(a.cells[3].textContent);
+                default:
+                    return 0;
+            }
+        });
+
+        // Reorder the DOM elements
+        rows.forEach(row => tbody.appendChild(row));
     }
 
     function updatePagination() {
-    const visibleRows = document.querySelectorAll('.product-table tbody tr:not([style*="display: none"])');
-    const pageInfo = document.querySelector('.page-info');
-    
-    if (pageInfo) {
-        pageInfo.textContent = `Showing ${visibleRows.length} of ${document.querySelectorAll('.product-table tbody tr').length} products`;
-    }
-    
-    // Reset pagination to first page
-    document.querySelectorAll('.page-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    const firstPageBtn = document.querySelector('.page-button:nth-child(2)');
-    if (firstPageBtn) {
-        firstPageBtn.classList.add('active');
-    }
+        const visibleRows = document.querySelectorAll('.product-table tbody tr:not([style*="display: none"])');
+        const pageInfo = document.querySelector('.page-info');
+
+        if (pageInfo) {
+            pageInfo.textContent = `Showing ${visibleRows.length} of ${document.querySelectorAll('.product-table tbody tr').length} products`;
+        }
+
+        // Reset pagination to first page
+        document.querySelectorAll('.page-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const firstPageBtn = document.querySelector('.page-button:nth-child(2)');
+        if (firstPageBtn) {
+            firstPageBtn.classList.add('active');
+        }
     }
 
     // Debounce function to limit how often a function gets called
     function debounce(func, delay) {
-    let timeout;
-    return function() {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), delay);
-    };
+        let timeout;
+        return function () {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+        };
     }
 
     // Event listeners with debounce for better performance
@@ -693,11 +704,11 @@
 
     // Initialize filters on page load
     window.addEventListener('DOMContentLoaded', () => {
-    // Set initial sort option
-    sortDropdown.value = filterState.sort;
-    
-    // Apply initial filters
-    applyFilters();
+        // Set initial sort option
+        sortDropdown.value = filterState.sort;
+
+        // Apply initial filters
+        applyFilters();
     });
 
     // Modal functionality
@@ -711,14 +722,14 @@
 
     // Close modals when clicking the close button or outside the modal
     document.querySelectorAll('.close-modal, .cancel-button').forEach(element => {
-        element.addEventListener('click', function() {
+        element.addEventListener('click', function () {
             const modal = this.closest('.modal-overlay');
             closeModal(modal.id);
         });
     });
 
     document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', function(event) {
+        modal.addEventListener('click', function (event) {
             if (event.target === this) {
                 closeModal(this.id);
             }
@@ -727,7 +738,7 @@
 
     // Delete button functionality
     document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const productId = this.getAttribute('data-id');
             document.getElementById('deleteProductId').value = productId;
             openModal('deleteModal');
@@ -735,7 +746,7 @@
     });
 
     // Confirm delete functionality
-    document.querySelector('#deleteModal .confirm-button').addEventListener('click', function() {
+    document.querySelector('#deleteModal .confirm-button').addEventListener('click', function () {
         const productId = document.getElementById('deleteProductId').value;
         // Here you would typically make an AJAX call to delete the product
         $.ajax({
@@ -743,7 +754,7 @@
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ id: productId }),
-            success: function(response) {
+            success: function (response) {
                 // Handle success response
                 console.log('Product deleted successfully:', response);
                 // Remove the product row from the table
@@ -752,7 +763,7 @@
                     row.remove();
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Handle error response
                 console.error('Error deleting product:', error);
                 alert('Error deleting product. Please try again.');
@@ -763,7 +774,7 @@
     });
 
     // Add product button functionality
-    document.getElementById('addProductButton').addEventListener('click', function() {
+    document.getElementById('addProductButton').addEventListener('click', function () {
         document.getElementById('productModalTitle').textContent = 'Add New Product';
         document.getElementById('productId').value = '';
         document.getElementById('productForm').reset();
@@ -772,7 +783,7 @@
 
     // Edit button functionality
     document.querySelectorAll('.edit-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const productId = this.getAttribute('data-id');
             console.log(productId);
             document.getElementById('productModalTitle').textContent = 'Edit Product';
@@ -788,62 +799,33 @@
                 stock: parseInt(row.querySelector('td:nth-child(4)').textContent),
                 description: row.querySelector('td:nth-child(5)').textContent
             };
-            
+
             // For demonstration purposes, let's populate form with some sample data
             document.getElementById('productName').value = productData.name;
             document.getElementById('productCategory').value = productData.category;
             document.getElementById('productPrice').value = productData.price;
             document.getElementById('productStock').value = productData.stock;
             document.getElementById('productDescription').value = productData.description;
-            
-            $.ajax({
-                url: '{{url_for("edit_product")}}',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    id: productId,
-                    productName: productData.name,
-                    category: productData.category,
-                    price: productData.price,
-                    stock: productData.stock,
-                    description: productData.description
-                }),
-                success: function(response) {
-                    // Handle success response
-                    console.log('Product data fetched successfully:', response);
-                    // update row with new data
-                    // Update the row with new data
-                    row.querySelector('td:nth-child(1)').textContent = productData.name;
-                    row.querySelector('td:nth-child(2)').textContent = productData.category;
-                    row.querySelector('td:nth-child(3)').textContent = `$${productData.price.toFixed(2)}`;
-                    row.querySelector('td:nth-child(4)').textContent = productData.stock;
-                    row.querySelector('.status-badge').textContent = productData.stock > 10 ? 'In Stock' : productData.stock > 0 ? 'Low Stock' : 'Out of Stock';
-                    row.querySelector('.status-badge').className = `status-badge ${productData.stock > 10 ? 'in-stock' : productData.stock > 0 ? 'low-stock' : 'out-of-stock'}`;
-                },
-                error: function(xhr, status, error) {
-                    // Handle error response
-                    console.error('Error fetching product data:', error);
-                    alert('Error fetching product data. Please try again.');
-                }
-            });
+
+
             openModal('productModal');
         });
     });
 
     // Save product functionality
-    document.getElementById('saveProductButton').addEventListener('click', function() {
+    document.getElementById('saveProductButton').addEventListener('click', function () {
         const productId = document.getElementById('productId').value;
         const productName = document.getElementById('productName').value;
         const category = document.getElementById('productCategory').value;
         const price = document.getElementById('productPrice').value;
         const stock = document.getElementById('productStock').value;
         const description = document.getElementById('productDescription').value;
-        
+
         if (!productName || !category || !price || stock === '') {
             alert('Please fill in all required fields.');
             return;
         }
-        
+
         // fetch highest id in .product-table tbody column 5 button data-id property
         const rows = document.querySelectorAll('.product-table tbody tr');
         let highestId = 0;
@@ -853,7 +835,7 @@
                 highestId = id;
             }
         });
-        
+
         // Increment the highest ID for the new product
         const newId = highestId + 1;
         // Here you would typically make an AJAX call to save the product
@@ -862,7 +844,7 @@
             url: '{{url_for("save_product")}}',
             type: 'POST',
             data: JSON.stringify({
-                id: newId,
+                id: productId ? productId : newId,
                 productName: productName,
                 category: category,
                 price: price,
@@ -870,17 +852,25 @@
                 description: description
             }),
             contentType: 'application/json',
-            success: function(response) {
+            success: function (response) {
                 // Handle success response
                 console.log('Product saved successfully:', response);
                 alert(`Product would be ${action}: ${productName}`);
-                 // Dynamically add the new product to the table
-                 $('.product-table tbody').append(`
+                // Dynamically add the new product to the table
+                if (action == "updated") {
+                    const row = document.querySelector(`.product-table .edit-button[data-id="${productId}"]`).closest('tr');
+                    row.querySelector('td:nth-child(1)').textContent = productName;
+                    row.querySelector('td:nth-child(2)').textContent = category;
+                    row.querySelector('td:nth-child(3)').textContent = price;
+                    row.querySelector('td:nth-child(4)').textContent = stock;
+                    updateStockStatus();
+                }
+                else {
+                    $('.product-table tbody').append(`
                             <tr>
                                 <td>${productName}</td>
                                 <td>${category}</td>
                                 <td>${price}</td>
-                                
                                 <td>${stock}</td>
                                 <td><span class="status-badge in-stock">In Stock</span></td>
                                 <td>
@@ -899,21 +889,21 @@
                             </tr>
                 `);
 
+                }
+
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Handle error response
                 console.error('Error saving product:', error);
             }
         });
 
-        
-        
         closeModal('productModal');
     });
 
     // View button functionality
     document.querySelectorAll('.view-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const productId = this.getAttribute('data-id');
             // Here you would typically redirect to a product detail page
             alert(`View product with ID: ${productId}`);
@@ -924,12 +914,12 @@
     // Pagination functionality
     document.querySelectorAll('.page-button').forEach(button => {
         if (!button.disabled) {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 document.querySelectorAll('.page-button').forEach(btn => {
                     btn.classList.remove('active');
                 });
                 this.classList.add('active');
-                
+
                 // Here you would typically fetch products for the selected page
                 // For demonstration only
                 if (this.textContent) {
@@ -939,8 +929,8 @@
         }
     });
 
-    
-    searchInput.addEventListener('input', function() {
+
+    searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
         // Here you would typically filter products based on search term
         console.log(`Searching for: ${searchTerm}`);
@@ -948,7 +938,7 @@
 
     // Filter dropdown functionality
     document.querySelectorAll('.filter-dropdown').forEach(dropdown => {
-        dropdown.addEventListener('change', function() {
+        dropdown.addEventListener('change', function () {
             const filterValue = this.value;
             // Here you would typically filter products based on the selected filter
             console.log(`Filter selected: ${filterValue}`);
@@ -956,7 +946,7 @@
     });
 
     // Sort dropdown functionality
-    sortDropdown.addEventListener('change', function() {
+    sortDropdown.addEventListener('change', function () {
         const sortValue = this.value;
         // Here you would typically sort products based on the selected option
         console.log(`Sort by: ${sortValue}`);
@@ -968,10 +958,10 @@
         rows.forEach(row => {
             const stockCell = row.querySelector('td:nth-child(4)');
             const statusCell = row.querySelector('td:nth-child(5) .status-badge');
-            
+
             if (stockCell && statusCell) {
                 const stockValue = parseInt(stockCell.textContent);
-                
+
                 if (stockValue == 0) {
                     statusCell.className = 'status-badge out-of-stock';
                     statusCell.textContent = 'Out of Stock';

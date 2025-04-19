@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}User Management{% endblock %}
+{% block title %}Users{% endblock %}
 
 {% block styles %}
 <!-- Add any page-specific CSS here -->
@@ -479,9 +479,9 @@
 </div>
 
 <!-- JavaScript for User Management -->
-<script>
+<script type="module">
     // Import the modal creator
-    import { ModalCreator } from '/static/js/modal-creator.js';
+    import { ModalCreator } from '{{ url_for("static", filename="js/ModalCreator.js") }}';
 
     // DOM Elements
     const searchInput = document.querySelector('.search-input');
@@ -589,7 +589,7 @@
     };
 
     // Delete User Modal Configuration
-    const deleteUserModalConfig = {
+    /*const deleteUserModalConfig = {
         modalId: 'deleteUserModal',
         title: 'Confirm Delete',
         message: 'Are you sure you want to delete this user? This action cannot be undone.',
@@ -600,13 +600,13 @@
             // Here you would typically make an API call to delete a user
             alert(`User with ID ${userId} would be deleted`);
         }
-    };
+    };*/
 
     // Instantiate modals
     const addUserModal = new ModalCreator(addUserModalConfig);
     const editUserModal = new ModalCreator(editUserModalConfig);
     const viewUserModal = new ModalCreator(viewUserModalConfig);
-    const deleteUserModal = new ModalCreator(deleteUserModalConfig);
+    //const deleteUserModal = new ModalCreator(deleteUserModalConfig);
 
     // Event handlers
     function handleSearch(e) {
@@ -639,7 +639,7 @@
             notes: 'System administrator with full access.'
         };
         
-        editUserModal.setFormValues(userData);
+        //editUserModal.setFormValues(userData);
         editUserModal.open(userId);
     }
 
@@ -656,7 +656,7 @@
             notes: 'System administrator with full access.'
         };
         
-        viewUserModal.setFormValues(userData);
+        //viewUserModal.setFormValues(userData);
         viewUserModal.open();
     }
 
