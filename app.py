@@ -78,7 +78,7 @@ def home():
 
 
 @app.route('/edituser', methods=['POST'])
-def edit_user():
+def edituser():
     data  = request.get_json()
     data['status'] = 'active'
     print(data['name'], "::::::::::::::::::::::::::::::::::::::::")
